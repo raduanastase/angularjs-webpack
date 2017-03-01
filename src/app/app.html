@@ -1,9 +1,6 @@
 <main>
-  <h1 class="title">Hello from Angular !</h1>
-
-  <!-- Images (and assets) are parsed and loaded from within the public directory -->
-  <img src="/img/logo.png">
+    <h1 class="title">Word Game with AngularJS</h1>
+    <div class="scrambled-word">Random scrambled word: {{appCtrl.randomScrambledWord}}</div>
+    <div class="solved-word">Random solved word: {{appCtrl.randomSolvedWord}}</div>
+    <div class="max-score">Max score: {{appCtrl.maxScore}}</div>
 </main>
-<footer>
-  <a ng-href="{{app.url}}">Webpack Angular Starter</a>
-</footer>
