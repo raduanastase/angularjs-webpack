@@ -1,4 +1,14 @@
 /* styles in src/style directory are applied to the whole page */
 body {
-  background: #e3dcdb;
+  background: #000000;
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+
+.correct {
+  background: green;
+}
+
+.wrong {
+  background: red;
 }

@@ -11,13 +11,44 @@ let app = () => {
 };
 
 class AppCtrl {
-  constructor() {
+  constructor($scope) {
+    this.$scope = $scope;
     this.url = 'test';
     this.wordList = this.shuffle(['PIZZA', 'TOMORROW', 'MONITOR', 'COMPUTER']);
     this.wordIncrement = 0;
     this.randomScrambledWord = this.getRandomScrambledWord();
     this.randomSolvedWord = this.getRandomSolvedWord();
+    this.mistakes = 0;
+    this.submitted = false;
     this.maxScore = this.calculateScore(this.randomScrambledWord, 0);
+    this.TIME_LIMIT = 40000;
+    $scope.score = 0;
+    $scope.verifyWord = this.onVerifyWord.bind(this);
+    $scope.verifyIfDelete = this.onVerifyIfDelete.bind(this);
+  }
+
+  onVerifyIfDelete($event) {
+    if($event.keyCode === 8 || $event.keyCode === 46) {
+      if(this.$scope.score > 0) {
+        this.$scope.score--;
+      }
+    }
+  }
+
+  onVerifyWord() {
+    if (this.$scope.word.toUpperCase() === this.randomSolvedWord) {
+      this.$scope.correct = true;
+      this.$scope.wrong = false;
+      this.$scope.score += this.calculateScore(this.randomSolvedWord, this.mistakes);
+      this.mistakes = 0;
+      this.wordIncrement++;
+      this.randomScrambledWord = this.getRandomScrambledWord();
+      this.randomSolvedWord = this.getRandomSolvedWord();
+      this.$scope.word = '';
+    } else {
+      this.$scope.correct = false;
+      this.$scope.wrong = true;
+    }
   }
 
   shuffle(array) {

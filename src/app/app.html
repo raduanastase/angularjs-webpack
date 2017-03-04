@@ -1,6 +1,8 @@
 <main>
-    <h1 class="title">Word Game with AngularJS</h1>
-    <div class="scrambled-word">Random scrambled word: {{appCtrl.randomScrambledWord}}</div>
-    <div class="solved-word">Random solved word: {{appCtrl.randomSolvedWord}}</div>
-    <div class="max-score">Max score: {{appCtrl.maxScore}}</div>
+    <h1 class="title">Word Game</h1>
+    <div class="scrambled-word">{{appCtrl.randomScrambledWord}} - {{appCtrl.randomSolvedWord}}</div>
+    <div class="solved-word">
+        <input ng-model="word" ng-keydown="verifyIfDelete($event)" ng-change="verifyWord()" ng-class="{correct: correct, wrong: wrong}">
+    </div>
+    <div class="max-score">Score: {{score}}</div>
 </main>
