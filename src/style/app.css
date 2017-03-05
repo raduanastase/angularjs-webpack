@@ -1,8 +1,51 @@
 /* styles in src/style directory are applied to the whole page */
 body {
+  width: 100%;
   background: #000000;
   color: #FFFFFF;
   text-transform: uppercase;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+main {
+  width: 800px;
+  height: 800px;
+  display: inline-block;
+}
+
+.border-container {
+  position: relative;
+  display: inline-block;
+  width: 80%;
+  height: 80%;
+  border: 2px solid #1632A0;
+  padding: 20px;
+  margin: 20px;
+}
+.border-container:before {
+  content:"";
+  display:block;
+  position:absolute;
+  z-index:-1;
+  top:2px;
+  left:2px;
+  right:2px;
+  bottom:2px;
+  border:2px solid #1632A0;
+}
+
+.game-container {
+  height: 100%;
+}
+
+.game {
+  border-right: 1px solid #1632A0;
+  height: 100%;
+}
+
+.scrambled-word {
+  margin-bottom: 10px;
 }
 
 .correct {
@@ -11,4 +54,12 @@ body {
 
 .wrong {
   background: red;
+}
+
+table {
+  width: 100%;
+}
+
+table th {
+  width: 50%;
 }

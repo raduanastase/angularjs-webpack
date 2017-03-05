@@ -1,4 +1,5 @@
 import angular from 'angular';
+import uiBootstrap from 'angular-ui-bootstrap';
 
 import '../style/app.css';
 
@@ -25,13 +26,16 @@ class AppCtrl {
     $scope.score = 0;
     $scope.verifyWord = this.onVerifyWord.bind(this);
     $scope.verifyIfDelete = this.onVerifyIfDelete.bind(this);
+    $scope.time = 40;
   }
 
   onVerifyIfDelete($event) {
-    if($event.keyCode === 8 || $event.keyCode === 46) {
-      if(this.$scope.score > 0) {
-        this.$scope.score--;
-      }
+    if (
+      ($event.keyCode === 8 || $event.keyCode === 46) &&
+      this.$scope.score > 0 &&
+      this.$scope.word !== ''
+    ) {
+      this.$scope.score--;
     }
   }
 
@@ -78,7 +82,7 @@ class AppCtrl {
 
 const MODULE_NAME = 'app';
 
-angular.module(MODULE_NAME, [])
+angular.module(MODULE_NAME, [uiBootstrap])
   .directive('app', app)
   .controller('AppCtrl', AppCtrl);
 
