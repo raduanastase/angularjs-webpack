@@ -1,7 +1,20 @@
 import angular from 'angular';
 import uiBootstrap from 'angular-ui-bootstrap';
+import firebase from 'firebase';
 
 import '../style/app.css';
+
+// Set the firebase configuration for your app
+const config = {
+  apiKey: "AIzaSyAOnQKBQ1O8MredgNX5rBO9tqyzkGcL8ik",
+  authDomain: "wordgameangularjs.firebaseapp.com",
+  databaseURL: "https://wordgameangularjs.firebaseio.com/",
+  storageBucket: "gs://wordgameangularjs.appspot.com"
+};
+
+firebase.initializeApp(config);
+// Get a reference to the database service
+const database = firebase.database();
 
 let app = () => {
   return {
@@ -12,21 +25,46 @@ let app = () => {
 };
 
 class AppCtrl {
-  constructor($scope) {
+  constructor($scope, $interval, $q) {
     this.$scope = $scope;
-    this.url = 'test';
-    this.wordList = this.shuffle(['PIZZA', 'TOMORROW', 'MONITOR', 'COMPUTER']);
+    this.$interval = $interval;
+    this.$q = $q;
     this.wordIncrement = 0;
-    this.randomScrambledWord = this.getRandomScrambledWord();
-    this.randomSolvedWord = this.getRandomSolvedWord();
     this.mistakes = 0;
-    this.submitted = false;
-    this.maxScore = this.calculateScore(this.randomScrambledWord, 0);
-    this.TIME_LIMIT = 40000;
     $scope.score = 0;
     $scope.verifyWord = this.onVerifyWord.bind(this);
     $scope.verifyIfDelete = this.onVerifyIfDelete.bind(this);
     $scope.time = 40;
+    $scope.startGame = this.onStartGame.bind(this);
+    $scope.showLoadingScreen = true;
+
+    this.getData();
+  }
+
+  getData() {
+    const wordsPromise = database.ref('/words/').once('value').then((snapshot) => snapshot.val());
+    const usersPromise = database.ref('/players/').once('value').then((snapshot) => snapshot.val());
+
+    this.$q.all([wordsPromise, usersPromise]).then(values => {
+      this.$scope.showLoadingScreen = false;
+      this.wordList = this.shuffle(values[0]);
+      this.$scope.players = values[1];
+      this.randomScrambledWord = this.getRandomScrambledWord();
+      this.randomSolvedWord = this.getRandomSolvedWord();
+    });
+  }
+
+  onStartGame() {
+    if (!this.interval) {
+      this.interval = this.$interval(() => {
+        if (this.$scope.time > 0) {
+          this.$scope.time--;
+        } else {
+          clearInterval(this.interval);
+          console.log('game over');
+        }
+      }, 1000);
+    }
   }
 
   onVerifyIfDelete($event) {
@@ -40,7 +78,7 @@ class AppCtrl {
   }
 
   onVerifyWord() {
-    if (this.$scope.word.toUpperCase() === this.randomSolvedWord) {
+    if (this.$scope.word.toLowerCase() === this.randomSolvedWord) {
       this.$scope.correct = true;
       this.$scope.wrong = false;
       this.$scope.score += this.calculateScore(this.randomSolvedWord, this.mistakes);

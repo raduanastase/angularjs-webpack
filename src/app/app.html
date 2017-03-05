@@ -5,6 +5,11 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-xs-offset-2 col-xs-8 instructions">
+            <em>Get as many correct words as possible in 40 seconds. As soon as you click inside the input, the timer will start.</em>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-xs-6">
             <div class="time">Time: {{time}}</div>
         </div>
@@ -24,7 +29,7 @@
                     <div class="col-xs-12">
                         <div class="solved-word">
                             <input ng-model="word" ng-keydown="verifyIfDelete($event)" ng-change="verifyWord()"
-                                   ng-class="{correct: correct, wrong: wrong}">
+                                   ng-class="{correct: correct, wrong: wrong}" ng-focus="startGame()">
                         </div>
                     </div>
                 </div>
@@ -45,7 +50,10 @@
                             </tr>
                             </thead>
                             <tbody>
-
+                                <tr ng-repeat="player in players track by $index">
+                                    <td>{{ player.name }}</td>
+                                    <td>{{ player.score }}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -53,4 +61,5 @@
             </div>
         </div>
     </div>
+    <div class="loading-screen" ng-show="showLoadingScreen"><img src="img/loading.gif"/></div>
 </main>
